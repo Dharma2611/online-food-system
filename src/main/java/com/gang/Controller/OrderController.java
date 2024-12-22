@@ -18,6 +18,7 @@ import com.gang.Request.OrderRequest;
 import com.gang.Service.OrderService;
 import com.gang.Service.UserService;
 
+
 @RestController
 @RequestMapping("/api")
 
@@ -34,11 +35,14 @@ public class OrderController {
 		
 	}
 	
-	@GetMapping("/order/user")
-	public ResponseEntity< List<Order>> getOrderHistory( @RequestHeader("Authorization") String jwt)throws Exception{
-		User user = userService.findUserByJwtToken(jwt);
-	 List<Order> orders = orderService.getUsersOrder(user.getId());
-		return new ResponseEntity<>(orders,HttpStatus.CREATED);
-		
-	}
+	  @GetMapping("/order/user")
+	    public ResponseEntity<List<Order>> getAllUserOrders(	@RequestHeader("Authorization") String jwt) throws Exception{
+	    
+	    	User user=userService.findUserByJwtToken(jwt);
+	    	
+	    	
+	    	List<Order> userOrders = orderService.getUsersOrder(user.getId());
+	    	return new  ResponseEntity<List<Order>>(userOrders,HttpStatus.OK);
+	    	
+	    }
 }

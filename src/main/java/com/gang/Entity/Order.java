@@ -1,14 +1,13 @@
 package com.gang.Entity;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonInclude;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -16,37 +15,46 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Entity
-@Getter
-@Setter
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "orders")
+@Table(name = "`order`")
 public class Order {
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private long id;
+	private Long id;
+
 	@ManyToOne
+
 	private User customer;
-	@ManyToOne
-	@JoinColumn(name = "restaurant_id")
+
 	@JsonIgnore
-	private Restaurant restaurant;
-	private Long totalAmount;
-	private String orderStatus;
-	private LocalDateTime createAt;
 	@ManyToOne
-	private Address delhiveryAddress;
 
-	@OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
-	private List<OrderItem> items = new ArrayList<OrderItem>();
-//	private Payment payment;
-	private int totalItems;
+	private Restaurant restaurant;
+
+	private Long totalAmount;
+
+	private String orderStatus;
+	@Temporal(TemporalType.TIMESTAMP)
+	private LocalDateTime createdAt;
+
+	@ManyToOne
+
+	private Address deliveryAddress;
+//  @JsonIgnore
+	@OneToMany( cascade = CascadeType.ALL, orphanRemoval = true,fetch = FetchType.EAGER)
+	private List<OrderItem> items;
+	@JoinColumn(name = "order_id")
+	private int totalItem;
+
 	private Long totalPrice;
-
 }

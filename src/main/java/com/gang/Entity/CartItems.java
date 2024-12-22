@@ -20,7 +20,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CartItems {
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
@@ -32,6 +32,5 @@ public class CartItems {
 	private int quantity;
 	private List<String> ingredients;
 	private long totalPrice;
-	
 
 }

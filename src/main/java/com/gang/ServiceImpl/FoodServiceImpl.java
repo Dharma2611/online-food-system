@@ -15,6 +15,7 @@ import com.gang.Request.CreateFoodRequest;
 import com.gang.Service.FoodService;
 
 import jakarta.transaction.Transactional;
+
 @Service
 @Transactional
 public class FoodServiceImpl implements FoodService {
@@ -34,17 +35,18 @@ public class FoodServiceImpl implements FoodService {
 		food.setIngredientsItems(req.getIngredients());
 		food.setSeasonal(req.isSeasonal());
 		food.setVegetarian(req.isVegetarian());
-		Food saveFood = frepository.save(food);
-		restaurant.getFoods().add(saveFood);
+		food = frepository.save(food);
+		restaurant.getFoods().add(food);
 
-		return saveFood;
+		return food;
 	}
 
 	@Override
 	public void deleteFood(Long foodId) throws Exception {
 		Food foodById = findFoodById(foodId);
 		foodById.setRestaurant(null);
-		frepository.save(foodById);
+//		frepository.save(foodById);
+		frepository.delete(foodById);
 
 	}
 
@@ -68,12 +70,11 @@ public class FoodServiceImpl implements FoodService {
 	}
 
 	private List<Food> FilterByCatgory(List<Food> restaurantList, String foodCategory) {
-		return restaurantList.stream().filter(food->{
-			if(food.getFoodCategory()!=null) {
+		return restaurantList.stream().filter(food -> {
+			if (food.getFoodCategory() != null) {
 				return food.getFoodCategory().getName().equals(foodCategory);
-				
-			}
-			else {
+
+			} else {
 				return false;
 			}
 		}).collect(Collectors.toList());
@@ -103,9 +104,9 @@ public class FoodServiceImpl implements FoodService {
 
 	@Override
 	public Food findFoodById(Long foodId) throws Exception {
-		
+
 		Optional<Food> byId = frepository.findById(foodId);
-		if(byId.isEmpty()) {
+		if (byId.isEmpty()) {
 			throw new Exception(" food is not exist....");
 		}
 

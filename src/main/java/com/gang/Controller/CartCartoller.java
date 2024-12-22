@@ -31,6 +31,7 @@ public class CartCartoller {
 	@PutMapping("/cart/add")
 	public ResponseEntity<CartItems> addToCart(@RequestBody AddToCartItemRequest request,  @RequestHeader("Authorization") String jwt) throws Exception{
 		CartItems cartItem = cartService.addToCart(request, jwt);
+		System.out.println("food id"+request.getFoodId());
 		return  new ResponseEntity<>(cartItem,HttpStatus.OK);
 		
 	}

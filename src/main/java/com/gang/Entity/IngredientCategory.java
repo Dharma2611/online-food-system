@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -30,7 +31,7 @@ public class IngredientCategory {
 	@JsonIgnore
 	private Restaurant restaurant;
 	@JsonIgnore
-	@OneToMany(mappedBy = "ingredientCategory")
+	@OneToMany(mappedBy = "ingredientCategory",cascade = CascadeType.ALL)
 	private List<IngredientsItems> ingredients= new ArrayList<IngredientsItems>();
 
 }

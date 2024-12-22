@@ -23,12 +23,10 @@ public class OrderItem {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 	@ManyToOne
+
 	private Food food;
 	private int quantity;
 	private Long totalPrice;
 	private List<String> ingredients;
-	@ManyToOne
-	@JoinColumn(name = "order_id") // Explicitly map the foreign key
-	private Order order;
 
 }

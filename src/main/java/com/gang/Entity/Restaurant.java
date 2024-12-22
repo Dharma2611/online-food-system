@@ -5,14 +5,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
@@ -36,8 +39,9 @@ public class Restaurant {
 	private String description;
 	private String cuisineType;
 	@OneToOne
+    @JoinColumn(name = "address_id")
 	private Address address;
-	@OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+	@Embedded
 	private ContactInformation contactInformation;
 	private String openingHours;
 	@JsonIgnore
@@ -47,7 +51,8 @@ public class Restaurant {
 	private List<String> images;
 	private LocalDateTime registrationDate;
 	private boolean open;
-	@OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	@JsonIgnore
+	
+	@OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL ,fetch = FetchType.EAGER)
+  @JsonIgnore
 	private List<Food> foods = new ArrayList<Food>();
 }

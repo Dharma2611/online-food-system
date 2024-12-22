@@ -34,16 +34,22 @@ public class CartServiceImpl  implements CartService{
 	@Override
 	public CartItems addToCart(AddToCartItemRequest req, String jwt) throws Exception {
 		// TODO Auto-generated method stub
+	
 		User user = userService.findUserByJwtToken(jwt);
 		Food food = foodService.findFoodById(req.getFoodId());
 		Cart cart = cartRepository.findByCustomerId(user.getId());
+		
 		for(CartItems cartItems : cart.getItems()) {
+			
 			int newQuantity = cartItems.getQuantity()+req.getQuantity();
-			return updateCartItemQuantity(cartItems.getId(), newQuantity);
+			 updateCartItemQuantity(cartItems.getId(), newQuantity);
 		}
 		
 		CartItems newCartItem= new CartItems();
+	
 		
+	
+		System.out.println("dharmendra"+food.toString());
 		newCartItem.setFood(food);
 		newCartItem.setCart(cart);
 		newCartItem.setQuantity(req.getQuantity());
@@ -51,6 +57,7 @@ public class CartServiceImpl  implements CartService{
 		newCartItem.setTotalPrice(req.getQuantity()*food.getPrice());
 		CartItems save = cartItemRepository.save(newCartItem);
 		cart.getItems().add(save);
+//		System.out.println("YAS");
 		return save;
 	}
 
@@ -63,7 +70,7 @@ public class CartServiceImpl  implements CartService{
 		}
 		CartItems cartItems = cartItem.get();
 		cartItems.setQuantity(quantity);
-		cartItems.setTotalPrice(cartItems.getTotalPrice()*quantity);
+		cartItems.setTotalPrice(cartItems.getFood().getPrice()*quantity);
 		
 		return cartItemRepository.save(cartItems);
 	}

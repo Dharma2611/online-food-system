@@ -58,9 +58,9 @@ public class OrderServiceImpl implements OrderService {
 	
 		
 		order.setCustomer(user);
-		order.setCreateAt(LocalDateTime.now());
+		order.setCreatedAt(LocalDateTime.now());
 		order.setOrderStatus("PENDING");
-		order.setDelhiveryAddress(saveAddress);
+		order.setDeliveryAddress(saveAddress);
 		order.setRestaurant(restaurant);
 
 		Cart cart = cartService.findCardByUserId(user.getId());
@@ -71,7 +71,7 @@ public class OrderServiceImpl implements OrderService {
 		        orderItem.setIngredients(cartItems.getIngredients());
 		        orderItem.setQuantity(cartItems.getQuantity());
 		        orderItem.setTotalPrice(cartItems.getTotalPrice());
-		        orderItem.setOrder(order); // Explicitly associate the order
+//		        orderItem.setOrder(order); // Explicitly associate the order
 		        orderItems.add(orderItem);
 		    }
 		Long total = cartService.calculateCartTotal(cart); 
@@ -103,15 +103,16 @@ public class OrderServiceImpl implements OrderService {
 	}
 
 	@Override
+	@Transactional
 	public List<Order> getUsersOrder(long userId) throws Exception {
-		// TODO Auto-generated method stub
-		return orderRepository.findByCustomerId(userId);
+		
+		return orderRepository.findAllUserOrders(userId);
 	}
 
 	@Override
 	public List<Order> getRestaurantOrder(Long restaurantId, String orderStatus) throws Exception {
 		// TODO Auto-generated method stub
-		List<Order> orders = orderRepository.findByRestaurantId(restaurantId);
+		List<Order> orders = orderRepository.findOrdersByRestaurantId(restaurantId);
 		if(orderStatus!=null) {
 			List<Order> collect = orders.stream().filter(order->order.getOrderStatus().equals(orderStatus)).collect(Collectors.toList());
 			
